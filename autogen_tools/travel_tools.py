@@ -7,9 +7,13 @@ load_dotenv()
 
 model = "gpt-3.5-turbo"
 llm_config = {
-    "model": model,
-    "temperature": 0.0,
-    "api_key": os.environ["OPENAI_API_KEY"],
+    "config_list": [
+        {
+            "model": model,
+            "api_key": os.environ.get("OPENAI_API_KEY"),
+            "temperature": 0.0,
+        },
+    ]
 }
 
 
@@ -39,22 +43,15 @@ def get_travel_advice(location: Annotated[str, "Location"]) -> str:
 # Define the assistant agent that suggests tool calls.
 assistant = ConversableAgent(
     name="TravelAssistant",
-    system_message="You are a helpful AI travel assistant. Return 'TERMINATE' when the task is done.",
-    llm_config=llm_config,
-)
-
-# Define the assistant agent that suggests tool calls.
-assistant = ConversableAgent(
-    name="TravelAssistant",
-    system_message="You are a helpful AI travel assistant. Return 'TERMINATE' when the task is done.",
+    system_message="You are a helpful AI travel assistant. Return 'TERMINATE' when the task is done."
+    "And information about travel.",
     llm_config=llm_config,
 )
 
 # The user proxy agent is used for interacting with the assistant agent and executes tool calls.
 user_proxy = ConversableAgent(
     name="User",
-    is_termination_msg=lambda msg: msg.get("content") is not None
-    and "TERMINATE" in msg["content"],
+    is_termination_msg=lambda msg: msg.get("content") is not None and "TERMINATE" in msg["content"],
     human_input_mode="NEVER",
 )
 
@@ -78,5 +75,5 @@ user_proxy.register_for_execution(name="get_travel_advice")(get_travel_advice)
 
 user_proxy.initiate_chat(
     assistant,
-    message="I need help with my travel plans. Can you help me? I am traveling to New York. I need hotel information. Also give me the status of my flight AA123.",
+    message="I need help with my travel plans. Can you help me? I am traveling to Chicago. I need hotel information. Also give me the status of my flight AA123.",
 )

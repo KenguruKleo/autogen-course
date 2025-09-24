@@ -10,9 +10,13 @@ load_dotenv()
 # Define LLM configuration
 model = "gpt-3.5-turbo"
 llm_config = {
-    "model": model,
-    "temperature": 0.9,
-    "api_key": os.environ["OPENAI_API_KEY"],
+    "config_list": [
+        {
+            "model": model,
+            "api_key": os.environ.get("OPENAI_API_KEY"),
+            "temperature": 0.4,
+        },
+    ]
 }
 
 # Define the data aggregation agent

@@ -8,9 +8,13 @@ load_dotenv()
 
 model = "gpt-3.5-turbo"
 llm_config = {
-    "model": model,
-    "temperature": 0.9,
-    "api_key": os.environ["OPENAI_API_KEY"],
+    "config_list": [
+        {
+            "model": model,
+            "api_key": os.environ.get("OPENAI_API_KEY"),
+            "temperature": 0.9,
+        },
+    ]
 }
 
 
@@ -43,15 +47,15 @@ def suggest_activity(location: Annotated[str, "Location"]) -> str:
 # Define the assistant agent that suggests tool calls.
 assistant = AssistantAgent(
     name="TravelPlannerAssistant",
-    system_message="You are a helpful AI travel planner. Return 'TERMINATE' when the task is done.",
+    system_message="You are a helpful AI travel planner. Return 'TERMINATE' when the task is done."
+    "And information about travel.",
     llm_config=llm_config,
 )
 
 # The user proxy agent is used for interacting with the assistant agent and executes tool calls.
 user_proxy = ConversableAgent(
     name="User",
-    is_termination_msg=lambda msg: msg.get("content") is not None
-    and "TERMINATE" in msg["content"],
+    is_termination_msg=lambda msg: msg.get("content") is not None and "TERMINATE" in msg["content"],
     human_input_mode="TERMINATE",
 )
 

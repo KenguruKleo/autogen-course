@@ -1,12 +1,20 @@
 import os
 import os
 from autogen import AssistantAgent, UserProxyAgent
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Define LLM configuration
+model = "gpt-3.5-turbo"
 llm_config = {
-    "model": "gpt-4",
-    "temperature": 0.4,
-    "api_key": os.environ["OPENAI_API_KEY"],
+    "config_list": [
+        {
+            "model": model,
+            "api_key": os.environ.get("OPENAI_API_KEY"),
+            "temperature": 0.4,
+        },
+    ]
 }
 
 # Define the writer agent

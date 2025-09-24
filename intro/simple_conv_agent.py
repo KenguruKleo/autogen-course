@@ -4,10 +4,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-model = "gpt-3.5-turbo"
+model = "gpt-4"
 llm_config = {
-    "model": model,
-    "api_key": os.environ.get("OPENAI_API_KEY"),
+    "config_list": [
+        {
+            "model": "gpt-3.5-turbo",
+            "api_key": os.environ.get("OPENAI_API_KEY"),
+        },
+    ]
 }
 
 agent = ConversableAgent(

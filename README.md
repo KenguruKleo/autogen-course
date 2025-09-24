@@ -1,3 +1,9 @@
+```
+python -m venv .venv
+source .venv/bin/activate
+```
+
+
 <!-- @format -->
 # Welcome to The AI Guild 🚀
 

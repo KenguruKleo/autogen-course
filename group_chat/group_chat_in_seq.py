@@ -6,9 +6,13 @@ load_dotenv()
 
 model = "gpt-3.5-turbo"
 llm_config = {
-    "model": model,
-    "temperature": 0.4,
-    "api_key": os.environ["OPENAI_API_KEY"],
+    "config_list": [
+        {
+            "model": model,
+            "api_key": os.environ.get("OPENAI_API_KEY"),
+            "temperature": 0.9,
+        },
+    ]
 }
 
 
@@ -93,7 +97,12 @@ chat_result = travel_planner_agent.initiate_chats(
 
 # Print the output of each agent in the sequential chat
 for result in chat_result:
+    print(f"\n\n=== Chat cost")
     print(result.cost)
+    # summary is a property of the chat result
+    print("\n*** Chat Summary ***\n")
+    print(result.summary)
+
 
 # ========
 # Explanation

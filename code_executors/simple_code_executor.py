@@ -6,8 +6,12 @@ load_dotenv()
 
 model = "gpt-3.5-turbo"
 llm_config = {
-    "model": model,
-    "api_key": os.environ.get("OPENAI_API_KEY"),
+    "config_list": [
+        {
+            "model": model,
+            "api_key": os.environ.get("OPENAI_API_KEY"),
+        },
+    ]
 }
 
 assistant = AssistantAgent(

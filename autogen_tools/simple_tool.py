@@ -7,9 +7,13 @@ load_dotenv()
 
 model = "gpt-3.5-turbo"
 llm_config = {
-    "model": model,
-    "temperature": 0.0,
-    "api_key": os.environ["OPENAI_API_KEY"],
+    "config_list": [
+        {
+            "model": model,
+            "api_key": os.environ.get("OPENAI_API_KEY"),
+            "temperature": 0.0,
+        },
+    ]
 }
 
 
@@ -36,8 +40,7 @@ assistant = ConversableAgent(
 # The user proxy agent is used for interacting with the assistant agent and executes tool calls.
 user_proxy = ConversableAgent(
     name="User",
-    is_termination_msg=lambda msg: msg.get("content") is not None
-    and "TERMINATE" in msg["content"],
+    is_termination_msg=lambda msg: msg.get("content") is not None and "TERMINATE" in msg["content"],
     human_input_mode="NEVER",
 )
 
